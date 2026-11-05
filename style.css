@@ -395,7 +395,7 @@ html[lang="ar"] .love-quote-text { font-family: 'Aref Ruqaa', serif; font-size: 
   display: flex; gap: 14px;
   width: max-content;
   padding: 6px 0 10px;
-  animation: marquee 40s linear infinite;
+  animation: marquee 15s linear infinite;
 }
 .gallery-track img {
   width: 180px; height: 240px;
