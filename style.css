@@ -395,7 +395,7 @@ html[lang="ar"] .love-quote-text { font-family: 'Aref Ruqaa', serif; font-size: 
   display: flex; gap: 14px;
   width: max-content;
   padding: 6px 0 10px;
-  animation: marquee 55s linear infinite;
+  animation: marquee 95s linear infinite;
 }
 .gallery-track img {
   width: 180px; height: 240px;
@@ -648,7 +648,7 @@ html[lang="ar"] .footer-date, html[lang="ar"] .footer-made { font-size: 13px; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .reveal { opacity: 1; transform: none; transition: none; }
-  .gallery-track { animation-duration: 160s; }
+  .gallery-track { animation-duration: 280s; }
   .env-tap { animation: none; }
 }
 
