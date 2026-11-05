@@ -254,11 +254,10 @@ html[lang="ar"] .hero-subtitle { font-size: 46px; line-height: 1.6; }
 
 .hero-names {
   margin-top: 14px;
-  font-family: var(--f-caps);
-  font-weight: 700;
-  font-size: 30px;
-  letter-spacing: .06em;
-  text-transform: uppercase;
+  font-family: 'Great Vibes', cursive;
+  font-weight: 400;
+  font-size: 54px;
+  letter-spacing: 0;
   color: var(--gold-glow);
   text-shadow: 0 0 16px rgba(220,196,154,.5);
   line-height: 1.1;
@@ -271,7 +270,8 @@ html[lang="ar"] .hero-subtitle { font-size: 46px; line-height: 1.6; }
   margin: 0 4px;
   color: var(--gold-lt);
 }
-html[lang="ar"] .hero-names { letter-spacing: 0; font-size: 34px; }
+/* Great Vibes has no Arabic letters — keep the Arabic caps font */
+html[lang="ar"] .hero-names { font-family: var(--f-caps); font-weight: 700; letter-spacing: 0; font-size: 34px; }
 
 .hero-date { margin: 22px auto 0; max-width: 300px; }
 .hd-month, .hd-year {
