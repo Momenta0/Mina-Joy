@@ -95,9 +95,9 @@ window.toggleLang = toggleLang;
    3. MUSIC MUTE TOGGLE
    Pauses/resumes the background song via the pill button.
 ──────────────────────────────────────────────────────────────── */
+/* Icons (mute button + player) switch via body.is-playing in CSS */
 function updateMusicIcon() {
-  const btn = document.getElementById('music-btn');
-  if (btn) btn.textContent = musicPlaying ? '🔊' : '🔇';
+  document.body.classList.toggle('is-playing', musicPlaying);
 }
 
 function toggleMusic() {
@@ -113,13 +113,64 @@ function toggleMusic() {
 
 window.toggleMusic = toggleMusic;
 
+/* Keep state honest if the browser pauses/plays the audio itself */
+if (bgMusic) {
+  bgMusic.addEventListener('play',  () => { musicPlaying = true;  updateMusicIcon(); });
+  bgMusic.addEventListener('pause', () => { musicPlaying = false; updateMusicIcon(); });
+}
+
+
+/* ────────────────────────────────────────────────────────────────
+   3b. MUSIC PLAYER SECTION
+   Play/pause + back/forward 10s + seekable progress bar.
+   Controls the same <audio id="bg-music"> as the mute button.
+──────────────────────────────────────────────────────────────── */
+const plPlay = document.getElementById('pl-play');
+const plBack = document.getElementById('pl-back');
+const plFwd  = document.getElementById('pl-fwd');
+const plProg = document.getElementById('pl-progress');
+const plBar  = document.getElementById('pl-bar');
+const plCur  = document.getElementById('pl-cur');
+const plDur  = document.getElementById('pl-dur');
+
+const fmtTime = s => {
+  if (!isFinite(s)) return '0:00';
+  return Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0');
+};
+
+if (bgMusic && plPlay) {
+  plPlay.addEventListener('click', toggleMusic);
+
+  plBack.addEventListener('click', () => {
+    bgMusic.currentTime = Math.max(0, bgMusic.currentTime - 10);
+  });
+  plFwd.addEventListener('click', () => {
+    if (isFinite(bgMusic.duration)) {
+      bgMusic.currentTime = Math.min(bgMusic.duration - 1, bgMusic.currentTime + 10);
+    }
+  });
+
+  plProg.addEventListener('click', e => {
+    if (!isFinite(bgMusic.duration)) return;
+    const r = plProg.getBoundingClientRect();
+    bgMusic.currentTime = ((e.clientX - r.left) / r.width) * bgMusic.duration;
+  });
+
+  bgMusic.addEventListener('loadedmetadata', () => { plDur.textContent = fmtTime(bgMusic.duration); });
+  bgMusic.addEventListener('timeupdate', () => {
+    const d = bgMusic.duration;
+    plCur.textContent = fmtTime(bgMusic.currentTime);
+    plBar.style.width = isFinite(d) ? (bgMusic.currentTime / d * 100) + '%' : '0';
+  });
+}
+
 
 /* ────────────────────────────────────────────────────────────────
    4. COUNTDOWN TIMER
    Counts down to the church ceremony (the first event of the day).
    Updates every second. Shows 🎉 when target date passes.
 ──────────────────────────────────────────────────────────────── */
-const eventDate = new Date('2026-09-19T17:00:00');
+const eventDate = new Date('2026-11-15T16:30:00');
 
 function updateCountdown() {
   const diff = eventDate - new Date();
@@ -127,7 +178,7 @@ function updateCountdown() {
   if (diff <= 0) {
     const row = document.querySelector('.countdown-row');
     if (row) row.innerHTML =
-      '<p style="text-align:center;font-family:\'Allura\',cursive;font-size:32px;color:var(--ink)">🎉</p>';
+      '<p style="text-align:center;font-size:40px;color:var(--ink)">🎉</p>';
     return;
   }
 
@@ -194,12 +245,12 @@ if (calBtnChurch) {
   calBtnChurch.addEventListener('click', e => {
     e.preventDefault();
     downloadICS({
-      start: '20260919T170000',
-      end: '20260919T183000',
-      summary: 'David & Nardine — Wedding Ceremony',
-      location: 'Church of Archangel Michael in Sheraton',
-      description: 'Wedding ceremony of David & Nardine.',
-      filename: 'david-nardine-church.ics'
+      start: '20261115T163000',
+      end: '20261115T180000',
+      summary: 'Mina & Joy — Wedding Ceremony',
+      location: 'Saint Georgios and Ava Antonios Church - El Nozha',
+      description: 'Wedding ceremony of Mina & Joy.',
+      filename: 'mina-joy-church.ics'
     });
   });
 }
@@ -209,12 +260,12 @@ if (calBtnReception) {
   calBtnReception.addEventListener('click', e => {
     e.preventDefault();
     downloadICS({
-      start: '20260919T193000',
-      end: '20260919T233000',
-      summary: 'David & Nardine — Wedding Reception',
-      location: 'Casa Maria Orabi',
-      description: 'Wedding reception of David & Nardine.',
-      filename: 'david-nardine-reception.ics'
+      start: '20261115T190000',
+      end: '20261115T230000',
+      summary: 'Mina & Joy — Wedding Reception',
+      location: 'Villa Orabi',
+      description: 'Wedding reception of Mina & Joy.',
+      filename: 'mina-joy-reception.ics'
     });
   });
 }
@@ -256,7 +307,7 @@ function initSigCanvas() {
   sigCanvas.width  = rect.width  * dpr;
   sigCanvas.height = rect.height * dpr;
   sigCtx.scale(dpr, dpr);
-  sigCtx.strokeStyle = '#3A3028';
+  sigCtx.strokeStyle = '#5B3039';
   sigCtx.lineWidth   = 1.8;
   sigCtx.lineCap     = 'round';
   sigCtx.lineJoin    = 'round';
